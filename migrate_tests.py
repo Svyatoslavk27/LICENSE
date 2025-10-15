@@ -8,7 +8,7 @@ def migrate_unittest_to_pytest(source):
     current_indent = ""
 
     for line in source.splitlines():
-        # 1️⃣ Знайти клас із unittest.TestCase (навіть з множинним успадкуванням)
+        #Знайти клас із unittest.TestCase (навіть з множинним успадкуванням)
         class_match = re.match(r'^(\s*)class\s+(\w+)\s*\((.*?)\):', line)
         if class_match:
             indent, name, bases = class_match.groups()
@@ -25,7 +25,7 @@ def migrate_unittest_to_pytest(source):
             current_indent = indent
             continue
 
-        # 2️⃣ Знайти метод test_*
+        #Знайти метод test_*
         method_match = re.match(r'^(\s*)def\s+test_(\w+)\s*\(self[\,\)]', line)
         if method_match:
             indent, name = method_match.groups()
@@ -35,12 +35,12 @@ def migrate_unittest_to_pytest(source):
             result.append(new_line)
             continue
 
-        # 3️⃣ Кінець класу
+        #Кінець класу
         if inside_class and (not line.startswith(current_indent + " ") and line.strip()):
             inside_class = False
             current_indent = ""
 
-        # 4️⃣ Прибираємо import unittest
+        #Прибираємо import unittest
         if re.match(r'\s*import\s+unittest', line):
             continue
         if re.match(r'\s*from\s+unittest\s+import', line):
